@@ -263,6 +263,15 @@ namespace Switcheroo
         /// </summary>
         private void LoadData(InitialFocus focus)
         {
+            if (Settings.Default.HelpButton)
+            {
+                ShowHelpTextBlock.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                ShowHelpTextBlock.Visibility = Visibility.Visible;
+            }
+
             _unfilteredWindowList = new WindowFinder().GetWindows().Select(window => new AppWindowViewModel(window)).ToList();
 
             var firstWindow = _unfilteredWindowList.FirstOrDefault();

@@ -142,5 +142,17 @@ namespace Switcheroo.Properties {
                 this["EnableHotKey"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HelpButton {
+            get {
+                return ((bool)(this["HelpButton"]));
+            }
+            set {
+                this["HelpButton"] = value;
+            }
+        }
     }
 }

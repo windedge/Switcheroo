@@ -67,6 +67,7 @@ namespace Switcheroo
             AutoSwitch.IsChecked = Settings.Default.AutoSwitch;
             AutoSwitch.IsEnabled = Settings.Default.AltTabHook;
             RunAsAdministrator.IsChecked = Settings.Default.RunAsAdmin;
+            HelpButton.IsChecked = Settings.Default.HelpButton;
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -107,6 +108,7 @@ namespace Switcheroo
             Settings.Default.AltTabHook = AltTabCheckBox.IsChecked.GetValueOrDefault();
             Settings.Default.AutoSwitch = AutoSwitch.IsChecked.GetValueOrDefault();
             Settings.Default.RunAsAdmin = RunAsAdministrator.IsChecked.GetValueOrDefault();
+            Settings.Default.HelpButton = HelpButton.IsChecked.GetValueOrDefault();
             Settings.Default.Save();
 
             if (closeOptionsWindow)
@@ -242,6 +244,14 @@ namespace Switcheroo
         private void HotKeyCheckBox_OnUnchecked(object sender, RoutedEventArgs e)
         {
             HotkeyPreview.IsEnabled = false;
+        }
+        private void HelpButtonCheckBox_OnChecked(object sender, RoutedEventArgs e)
+        {
+            HelpButton.IsEnabled = true;
+        }
+        private void HelpButtonCheckBox_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            HelpButton.IsEnabled = false;
         }
     }
 }

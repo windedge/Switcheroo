@@ -361,8 +361,12 @@ namespace Switcheroo
         {
             _unfilteredWindowList = new WindowFinder().GetWindows().Select(window => new AppWindowViewModel(window)).ToList();
 
-            var firstWindow = _unfilteredWindowList.FirstOrDefault();
+            // Move all un-activated top-most windows to the bottom of the list
+            var topMostWindowList = _unfilteredWindowList.TakeWhile(windowModel =>
+                windowModel.AppWindow.TopMost && windowModel.AppWindow != _foregroundWindow).ToList();
+            _unfilteredWindowList = _unfilteredWindowList.Except(topMostWindowList).Concat(topMostWindowList).ToList();
 
+            var firstWindow = _unfilteredWindowList.FirstOrDefault();
             var foregroundWindowMovedToBottom = false;
             
             // Move first window to the bottom of the list if it's related to the foreground window

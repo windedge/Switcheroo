@@ -179,7 +179,7 @@
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="22" />
-                                    <ColumnDefinition Width="400" />
+                                    <ColumnDefinition Width="600" />
                                     <ColumnDefinition Width="106" />
                                 </Grid.ColumnDefinitions>
                                 <Image Height="19" Grid.Row="0" Grid.Column="0" Margin="3,0"

@@ -399,6 +399,17 @@ namespace Switcheroo
                 lb.DataContext = _filteredWindowList;
             }
 
+            for (var i = 0; i < _unfilteredWindowList.Count; i++)
+            {
+                if (i < 10)
+                {
+                    _unfilteredWindowList[i].FormattedTitle = new XamlHighlighter().Highlight(new[] { new StringPart("" + (i + 1) + " ", true) });
+                }
+                _unfilteredWindowList[i].FormattedTitle += new XamlHighlighter().Highlight(new[] { new StringPart(_unfilteredWindowList[i].AppWindow.Title) });
+                _unfilteredWindowList[i].FormattedProcessTitle =
+                    new XamlHighlighter().Highlight(new[] { new StringPart(_unfilteredWindowList[i].AppWindow.ProcessTitle) });
+            }
+
             FocusItemInList(focus, foregroundWindowMovedToBottom);
 
             if ( tb.IsEnabled ) tb.Clear();

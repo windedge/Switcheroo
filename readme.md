@@ -12,6 +12,8 @@ Grab the binaries **[here](https://github.com/daanzu/Switcheroo/releases)**
 Custom Features
 -------
 - **Massively faster list display, especially with large number of open windows/processes.**
+- **Move all un-activated top-most ("always on top") windows to the bottom of the list.**
+- **Wider list.**
 - Numerical quick access - Alt+number for easy switching to any of the first 10 applications.
     - **Number hint for shortcut displayed in list, both filtered and sorted.**
 - Sort list by process name or title via tray icon menu or shortcut keys in-live list

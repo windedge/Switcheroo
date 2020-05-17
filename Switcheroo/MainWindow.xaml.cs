@@ -390,24 +390,15 @@ namespace Switcheroo
             if (_sortWinList == true)
             {
                 _unfilteredWindowList = _unfilteredWindowList.OrderBy(x => x.FormattedProcessTitle).ToList();
+                AddPrefixNumbersToFormattedTitle(_unfilteredWindowList);
                 
                 lb.DataContext = null;
                 lb.DataContext = _unfilteredWindowList;
             }
             else
             {
+                AddPrefixNumbersToFormattedTitle(_filteredWindowList);
                 lb.DataContext = _filteredWindowList;
-            }
-
-            for (var i = 0; i < _unfilteredWindowList.Count; i++)
-            {
-                if (i < 10)
-                {
-                    _unfilteredWindowList[i].FormattedTitle = new XamlHighlighter().Highlight(new[] { new StringPart("" + (i + 1) + " ", true) });
-                }
-                _unfilteredWindowList[i].FormattedTitle += new XamlHighlighter().Highlight(new[] { new StringPart(_unfilteredWindowList[i].AppWindow.Title) });
-                _unfilteredWindowList[i].FormattedProcessTitle =
-                    new XamlHighlighter().Highlight(new[] { new StringPart(_unfilteredWindowList[i].AppWindow.ProcessTitle) });
             }
 
             FocusItemInList(focus, foregroundWindowMovedToBottom);
@@ -416,6 +407,16 @@ namespace Switcheroo
             tb.Focus();
             CenterWindow();
             ScrollSelectedItemIntoView();
+        }
+
+        private static void AddPrefixNumbersToFormattedTitle(ICollection<AppWindowViewModel> windowCollection)
+        {
+            var windowList = windowCollection.ToList();
+            for (var i = 0; (i < 10) && (i < windowList.Count); i++)
+            {
+                var numberPrefix = new XamlHighlighter().Highlight(new[] { new StringPart("" + ((i + 1) % 10) + "  ", true) });
+                windowList[i].FormattedTitle = numberPrefix + windowList[i].FormattedTitle;
+            }
         }
 
         private static bool AreWindowsRelated(SystemWindow window1, SystemWindow window2)
@@ -704,6 +705,7 @@ namespace Switcheroo
             }
 
             _filteredWindowList = new ObservableCollection<AppWindowViewModel>(filterResults.Select(r => r.AppWindow));
+            AddPrefixNumbersToFormattedTitle(_filteredWindowList);
             lb.DataContext = _filteredWindowList;
             if (lb.Items.Count > 0)
             {

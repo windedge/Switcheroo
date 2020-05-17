@@ -7,22 +7,18 @@ It is distributed as-is with no warranty or guarantees whatsoever. Your patches 
 Download
 --------
 
-Grab the binaries **[here](https://github.com/elig0n/Switcheroo/releases)**
+Grab the binaries **[here](https://github.com/daanzu/Switcheroo/releases)**
 
 Custom Features
 -------
+- **Massively faster list display, especially with large number of open windows/processes.**
 - Numerical quick access - Alt+number for easy switching to any of the first 10 applications.
+    - **Number hint for shortcut displayed in list, both filtered and sorted.**
 - Sort list by process name or title via tray icon menu or shortcut keys in-live list
 - Tray icon single click open
 - List items context menu with options: close, run another instance (duplicate) or bring to front
 - Home/End/PageUp/PageDown keys navigation in the list
 - VIM-like navigation keys Alt+j Alt+k. Alt+Up/down is working now too for when you opened the application with alt+ shortcut pressed down.
-
-Planned:
-- Themes
-- Save list of current running apps to a text file
-- Code cleaning and refactoring
-- Hotkeys configuration
 
 Usage
 -----
@@ -40,7 +36,3 @@ Close selected window          | `Ctrl + W`,`Alt + X`|
 Options                        | `Alt + O`       |
 Toggle sort by process name    | `Alt + S`       |
 Dismiss Switcheroo             | `Esc`           |
-
-Discord
-------
-You can join the [Discord channel](https://discord.gg/xq66Yf) to further discuss development.

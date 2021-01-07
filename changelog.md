@@ -1,5 +1,8 @@
 Change log
 ----------
+### 2021-01-07: v1.0.1 ### 
+- Now preloads all data upon app load, rather than waiting for user to bring up the switcher to start fetching task data. This change helps so that the first time the switcher is invoked will be snappy since assets will already be cached.
+
 ### 2015-04-28: v0.9.0 ###
 - Much improved window closing: Switcheroo now stays open, so you can close several windows faster. Thanks to @HellBrick for proposing this idea and sending a pull request! :+1: (#25)
 - The focused window is now at the bottom of the list. This makes it faster to switch to the next window as you just need to press Alt+Enter, Enter. No more need to press Arrow Down. This makes Alt+Enter and Alt+Tab work in the same way (#24)

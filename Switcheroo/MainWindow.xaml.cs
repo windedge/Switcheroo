@@ -82,6 +82,8 @@ namespace Switcheroo
             CheckForUpdates();
 
             Opacity = 0;
+
+            PreloadData();  // Pre-load data to increase speed of initial pop-up
         }
 
         /// =================================
@@ -89,6 +91,24 @@ namespace Switcheroo
         #region Private Methods
 
         /// =================================
+
+        private void PreloadData()
+        {
+            /*
+             * This works by creating and destroying an invisible pop-up upon load,
+             * which forces a caching of everything including the image icons.
+             * 
+             * Simply running LoadData is not enough to solve all of the caching issues.
+             */
+            
+            tb.IsEnabled = true;
+            _foregroundWindow = SystemWindow.ForegroundWindow;
+            Show();
+            Activate();
+            Keyboard.Focus(tb);
+            LoadData(InitialFocus.NextItem);
+            HideWindow();
+        }
 
         private void SetUpKeyBindings()
         {
@@ -353,7 +373,6 @@ namespace Switcheroo
             }
             return null;
         }
-
         /// <summary>
         /// Populates the window list with the current running windows.
         /// </summary>
@@ -391,8 +410,6 @@ namespace Switcheroo
             {
                 _unfilteredWindowList = _unfilteredWindowList.OrderBy(x => x.FormattedProcessTitle).ToList();
                 AddPrefixNumbersToFormattedTitle(_unfilteredWindowList);
-                
-                lb.DataContext = null;
                 lb.DataContext = _unfilteredWindowList;
             }
             else

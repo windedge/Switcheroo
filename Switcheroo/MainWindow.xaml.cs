@@ -3,7 +3,7 @@
  * http://www.switcheroo.io/
  * Copyright 2009, 2010 James Sulak
  * Copyright 2014 Regin Larsen
- * 
+ *
  * Switcheroo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -13,7 +13,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Switcheroo.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -31,6 +31,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using ManagedWinapi;
@@ -81,6 +82,10 @@ namespace Switcheroo
 
             CheckForUpdates();
 
+            Theme.SuscribeWindow(this);
+
+            Theme.LoadTheme();
+
             Opacity = 0;
 
             PreloadData();  // Pre-load data to increase speed of initial pop-up
@@ -97,10 +102,10 @@ namespace Switcheroo
             /*
              * This works by creating and destroying an invisible pop-up upon load,
              * which forces a caching of everything including the image icons.
-             * 
+             *
              * Simply running LoadData is not enough to solve all of the caching issues.
              */
-            
+
             tb.IsEnabled = true;
             _foregroundWindow = SystemWindow.ForegroundWindow;
             Show();
@@ -134,9 +139,9 @@ namespace Switcheroo
                 else if (args.SystemKey == Key.Q && Keyboard.Modifiers.HasFlag(ModifierKeys.Alt))
                 {
                     _altTabAutoSwitch = false;
-                    tb.Text = "";
-                    tb.IsEnabled = true;
-                    tb.Focus();
+                    txtSearch.Text = "";
+                    txtSearch.IsEnabled = true;
+                    txtSearch.Focus();
                 }
                 else if (args.SystemKey == Key.S && Keyboard.Modifiers.HasFlag(ModifierKeys.Alt))
                 {
@@ -257,7 +262,7 @@ namespace Switcheroo
         private void SetUpNotifyIcon()
         {
             var icon = Properties.Resources.icon;
-            
+
             var runOnStartupMenuItem = new MenuItem("Run on &Startup", (s, e) => RunOnStartup(s as MenuItem))
             {
                 Checked = new AutoStart().IsEnabled
@@ -387,7 +392,7 @@ namespace Switcheroo
 
             var firstWindow = _unfilteredWindowList.FirstOrDefault();
             var foregroundWindowMovedToBottom = false;
-            
+
             // Move first window to the bottom of the list if it's related to the foreground window
             if (firstWindow != null && AreWindowsRelated(firstWindow.AppWindow, _foregroundWindow))
             {
@@ -410,18 +415,22 @@ namespace Switcheroo
             {
                 _unfilteredWindowList = _unfilteredWindowList.OrderBy(x => x.FormattedProcessTitle).ToList();
                 AddPrefixNumbersToFormattedTitle(_unfilteredWindowList);
-                lb.DataContext = _unfilteredWindowList;
+                lblProgramName.DataContext = _unfilteredWindowList;
             }
             else
             {
                 AddPrefixNumbersToFormattedTitle(_filteredWindowList);
-                lb.DataContext = _filteredWindowList;
+                lblProgramName.DataContext = _filteredWindowList;
             }
 
             FocusItemInList(focus, foregroundWindowMovedToBottom);
 
-            if ( tb.IsEnabled ) tb.Clear();
-            tb.Focus();
+            if ( txtSearch.IsEnabled ) {
+                txtSearch.Clear();
+            }
+            txtSearch.Focus();
+
+            FocusItemInList(focus, foregroundWindowMovedToBottom);
             CenterWindow();
             ScrollSelectedItemIntoView();
         }
@@ -445,17 +454,17 @@ namespace Switcheroo
         {
             if (focus == InitialFocus.PreviousItem)
             {
-                var previousItemIndex = lb.Items.Count - 1;
+                var previousItemIndex = lblProgramName.Items.Count - 1;
                 if (foregroundWindowMovedToBottom)
                 {
                     previousItemIndex--;
                 }
 
-                lb.SelectedIndex = previousItemIndex > 0 ? previousItemIndex : 0;
+                lblProgramName.SelectedIndex = previousItemIndex > 0 ? previousItemIndex : 0;
             }
             else
             {
-                lb.SelectedIndex = 0;
+                lblProgramName.SelectedIndex = 0;
             }
         }
 
@@ -481,7 +490,7 @@ namespace Switcheroo
         /// </summary>
         private void Switch()
         {
-            foreach (var item in lb.SelectedItems)
+            foreach (var item in lblProgramName.SelectedItems)
             {
                 var win = (AppWindowViewModel)item;
                 win.AppWindow.SwitchToLastVisibleActivePopup();
@@ -592,12 +601,12 @@ namespace Switcheroo
 
             if (Visibility != Visibility.Visible)
             {
-                tb.IsEnabled = true;
+                txtSearch.IsEnabled = true;
 
                 _foregroundWindow = SystemWindow.ForegroundWindow;
                 Show();
                 Activate();
-                Keyboard.Focus(tb);
+                Keyboard.Focus(txtSearch);
                 LoadData(InitialFocus.NextItem);
                 Opacity = 1;
             }
@@ -627,11 +636,11 @@ namespace Switcheroo
 
             if (Visibility != Visibility.Visible)
             {
-                tb.IsEnabled = true;
+                txtSearch.IsEnabled = true;
 
                 ActivateAndFocusMainWindow();
 
-                Keyboard.Focus(tb);
+                Keyboard.Focus(txtSearch);
                 if (e.ShiftDown)
                 {
                     LoadData(InitialFocus.PreviousItem);
@@ -644,8 +653,8 @@ namespace Switcheroo
                 if (Settings.Default.AutoSwitch && !e.CtrlDown)
                 {
                     _altTabAutoSwitch = true;
-                    tb.IsEnabled = false;
-                    tb.Text = "Press Alt + Q to search";
+                    txtSearch.IsEnabled = false;
+                    txtSearch.Text = "Press Alt + S to sort";
                 }
 
                 Opacity = 1;
@@ -698,12 +707,12 @@ namespace Switcheroo
 
         private void TextChanged(object sender, TextChangedEventArgs args)
         {
-            if (!tb.IsEnabled)
+            if (!txtSearch.IsEnabled)
             {
                 return;
             }
 
-            var query = tb.Text;
+            var query = txtSearch.Text;
 
             var context = new WindowFilterContext<AppWindowViewModel>
             {
@@ -723,10 +732,9 @@ namespace Switcheroo
 
             _filteredWindowList = new ObservableCollection<AppWindowViewModel>(filterResults.Select(r => r.AppWindow));
             AddPrefixNumbersToFormattedTitle(_filteredWindowList);
-            lb.DataContext = _filteredWindowList;
-            if (lb.Items.Count > 0)
-            {
-                lb.SelectedItem = lb.Items[0];
+            lblProgramName.DataContext = _filteredWindowList;
+            if (lblProgramName.Items.Count > 0) {
+                lblProgramName.SelectedItem = lblProgramName.Items[0];
             }
         }
 
@@ -750,7 +758,7 @@ namespace Switcheroo
             }
             e.Handled = true;
         }
-        
+
         private void MenuItem_Click_toFront(object sender, RoutedEventArgs e)
         {
             Switch();
@@ -783,7 +791,7 @@ namespace Switcheroo
 
         private async void CloseWindow(object sender, ExecutedRoutedEventArgs e)
         {
-            var windows = lb.SelectedItems.Cast<AppWindowViewModel>().ToList();
+            var windows = lblProgramName.SelectedItems.Cast<AppWindowViewModel>().ToList();
             foreach (var win in windows)
             {
                 bool isClosed = await _windowCloser.TryCloseAsync(win);
@@ -791,7 +799,7 @@ namespace Switcheroo
                     RemoveWindow(win);
             }
 
-            if (lb.Items.Count == 0)
+            if (lblProgramName.Items.Count == 0)
                 HideWindow();
 
             e.Handled = true;
@@ -803,14 +811,14 @@ namespace Switcheroo
             if (index < 0)
                 return;
 
-            if (lb.SelectedIndex == index)
+            if (lblProgramName.SelectedIndex == index)
             {
                 if (_filteredWindowList.Count > index + 1)
-                    lb.SelectedIndex++;
+                    lblProgramName.SelectedIndex++;
                 else
                 {
                     if (index > 0)
-                        lb.SelectedIndex--;
+                        lblProgramName.SelectedIndex--;
                 }
             }
 
@@ -826,15 +834,15 @@ namespace Switcheroo
 
         private void PreviousItem()
         {
-            if (lb.Items.Count > 0)
+            if (lblProgramName.Items.Count > 0)
             {
-                if (lb.SelectedIndex != 0)
+                if (lblProgramName.SelectedIndex != 0)
                 {
-                    lb.SelectedIndex--;
+                    lblProgramName.SelectedIndex--;
                 }
                 else
                 {
-                    lb.SelectedIndex = lb.Items.Count - 1;
+                    lblProgramName.SelectedIndex = lblProgramName.Items.Count - 1;
                 }
 
                 ScrollSelectedItemIntoView();
@@ -849,21 +857,21 @@ namespace Switcheroo
 
         private void NextItem()
         {
-            if (lb.Items.Count > 0)
+            if (lblProgramName.Items.Count > 0)
             {
-                if (lb.SelectedIndex != lb.Items.Count - 1)
+                if (lblProgramName.SelectedIndex != lblProgramName.Items.Count - 1)
                 {
-                    lb.SelectedIndex++;
+                    lblProgramName.SelectedIndex++;
                 }
                 else
                 {
-                    lb.SelectedIndex = 0;
+                    lblProgramName.SelectedIndex = 0;
                 }
 
                 ScrollSelectedItemIntoView();
             }
         }
-        
+
         private void ScrollListPageUp(object sender, ExecutedRoutedEventArgs e)
         {
             double n = NumOfVisibleRows();
@@ -892,7 +900,7 @@ namespace Switcheroo
 
         private double NumOfVisibleRows()
         {
-            return Math.Round(lb.ActualHeight / SearchGrid.ActualHeight); 
+            return Math.Round(lb.ActualHeight / SearchGrid.ActualHeight);
         }
 
         private void ScrollListHome(object sender, ExecutedRoutedEventArgs e)
@@ -910,13 +918,13 @@ namespace Switcheroo
 
             e.Handled = true;
         }
-        
+
         private void ScrollSelectedItemIntoView()
         {
-            var selectedItem = lb.SelectedItem;
+            var selectedItem = lblProgramName.SelectedItem;
             if (selectedItem != null)
             {
-                lb.ScrollIntoView(selectedItem);
+                lblProgramName.ScrollIntoView(selectedItem);
             }
         }
 
@@ -951,7 +959,7 @@ namespace Switcheroo
             NextItem,
             PreviousItem
         }
-        
+
         void Toggle_sortWinList()
         {
             _sortWinList = !_sortWinList;
@@ -961,12 +969,12 @@ namespace Switcheroo
         void Toggle_MenuItem(String text)
         {
             foreach (MenuItem mi in _notifyIcon.ContextMenu.MenuItems) {
-                if((String)mi.Text == text) 
+                if((String)mi.Text == text)
                 {
                     mi.Checked = !mi.Checked;
                 }
             }
         }
-        
+
     }
 }

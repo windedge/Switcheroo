@@ -1,8 +1,17 @@
 <img src="logo.png" alt="Switcheroo" width="48px" height="48px"> Switcheroo + mods
-==========
 
-This is my modded version of [Switcheroo](https://github.com/kvakulo/Switcheroo) branched after the maintainer became unresponsive.
-It is distributed as-is with no warranty or guarantees whatsoever. Your patches are welcome.
+Switcheroo is for anyone who spends more time using a keyboard than a mouse.
+Instead of alt-tabbing through a (long) list of open windows, Switcheroo allows
+you to quickly switch to any window by typing in just a few characters of its title.
+
+## Screenshots
+
+<img src="screenshot.png" alt="Screenshot of Switcheroo in action" width="540px" height="372px">
+
+**Light and Dark mode**
+
+<img src="light.png" alt="Screenshot of Switcheroo in action" width="540px">
+<img src="dark.png" alt="Screenshot of Switcheroo in action" width="540px">
 
 Download
 --------
@@ -30,6 +39,9 @@ Tips
     - "`text.readme`" filters for processes with "text" in their process name, and "readme" in their window title.
     - "`.`" is a shortcut that filters for only processes that match the current foreground window process.
     - "`.readme`" filters for only processes that match the current foreground window process,  and "readme" in their window title.
+Download (light/dark)
+--------
+**[Download Switcheroo here](https://github.com/jsonmartin/Switcheroo/releases)**
 
 Usage
 -----
@@ -40,7 +52,7 @@ Activate Switcheroo            | `Alt + Space`   | This shortcut can be customiz
 Activate Switcheroo            | `Alt + Tab`     | Only works if enabled under _Options_
 _When Switcheroo is open_      |                 |
 Switch to selected window      | `Enter`,`Alt`   | Or single mouse click on a list entry
-Select next/previous           | `Tab`/`Shift + Tab`, `Alt + J`/`Alt + K` | 
+Select next/previous           | `Tab`/`Shift + Tab`, `Alt + J`/`Alt + K` |
 Selection jumps                | `Home`, `End`, `PageUp`, `PageDown`| First, Last, Page up, Page down
 Switch to n-th window          | `Alt + 1..0`    | For first ten on the list. 0 for tenth.
 Close selected window          | `Ctrl + W`,`Alt + X`|

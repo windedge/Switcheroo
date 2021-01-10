@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
+using System.Windows.Controls;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -49,10 +51,40 @@ namespace Switcheroo
 
         private static void SetUpTheme()
         {
-            mainWindow.Border.Background =
-                mainWindow.txtSearch.Background = mainWindow.lblProgramName.Background
-                = mainWindow.Border.BorderBrush = Background;
-            mainWindow.txtSearch.Foreground = mainWindow.lblProgramName.Foreground = Foreground;
+            var BackgroundList = new ArrayList()
+            {
+                mainWindow.Border,
+                mainWindow.txtSearch,
+                mainWindow.lblProgramName,
+            };
+
+            var ForegroundList = new ArrayList() // Build a flattened ArrayList out of nested elements using InsertRange
+            {
+                mainWindow.txtSearch,
+                mainWindow.lblProgramName
+            };
+            ForegroundList.InsertRange(0, mainWindow.HelpPanel.Children.OfType<TextBlock>().ToList()); 
+            ForegroundList.InsertRange(0, mainWindow.HelpSearchDetails.Children.OfType<TextBlock>().ToArray()); 
+
+            foreach (dynamic fgElement in ForegroundList) // Using dynamic instead of var allows calling property on multiple data types
+            {
+                fgElement.Foreground = Foreground;
+            }
+
+            foreach (dynamic bgElement in BackgroundList)
+            {
+                if (bgElement is Border)
+                {
+                    bgElement.Background = Background;
+                    bgElement.BorderBrush = Background;
+                } 
+                else
+                {
+                    bgElement.Background = Background;
+                }
+            }
+
         }
+
     }
 }

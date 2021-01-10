@@ -52,7 +52,7 @@
                 <TextBlock FontSize="10" DockPanel.Dock="Left">
                     type to search
                 </TextBlock>
-                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
+                <StackPanel Name="HelpSearchDetails" Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
                     <TextBlock FontSize="10" Margin="0,0,8,0">
                         <TextBlock.ToolTip>
                             <TextBlock>Press <Bold>tab</Bold> or <Bold>↑↓</Bold> to navigate in the list</TextBlock>

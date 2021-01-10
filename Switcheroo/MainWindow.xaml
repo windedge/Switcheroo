@@ -198,7 +198,7 @@
                                 </TextBlock>
                                 <TextBlock
                                     local:FormattedTextAttribute.FormattedText="{Binding Path=FormattedProcessTitle}"
-                                    Grid.Row="0" Grid.Column="2" Margin="0" TextAlignment="Right" FontSize="14">
+                                    Grid.Row="0" Grid.Column="2" Margin="0" TextAlignment="Right" FontSize="12">
                                     <TextBlock.Foreground>
                                         <SolidColorBrush
                                             Color="{Binding IsBeingClosed, Converter={StaticResource ProcessColorConverter}, Mode=OneTime}" />

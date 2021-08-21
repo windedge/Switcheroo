@@ -23,6 +23,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using ManagedWinapi;
 using ManagedWinapi.Hooks;
+using Serilog;
 
 namespace Switcheroo
 {

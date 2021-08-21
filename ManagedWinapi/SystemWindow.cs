@@ -21,11 +21,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
-using System.Diagnostics;
 using System.Drawing;
 using ManagedWinapi.Windows.Contents;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace ManagedWinapi.Windows
 {

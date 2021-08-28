@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Switcheroo.Properties;
+using System;
 using System.Windows.Media;
-using Switcheroo.Properties;
 
 namespace Switcheroo
 {
@@ -34,7 +29,7 @@ namespace Switcheroo
             {
                 case Mode.Light:
                     Background = new SolidColorBrush(Color.FromRgb(248, 248, 248));
-                    Foreground = new SolidColorBrush(Color.FromRgb(0,0,0));
+                    Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0));
                     break;
                 case Mode.Dark:
                     Background = new SolidColorBrush(Color.FromRgb(30, 30, 30));

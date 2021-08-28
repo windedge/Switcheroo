@@ -190,7 +190,7 @@ namespace Switcheroo
         {
             foreach (DictionaryEntry attribute in property.Attributes)
             {
-                if ((Attribute) attribute.Value is SettingsManageabilityAttribute)
+                if ((Attribute)attribute.Value is SettingsManageabilityAttribute)
                     return true;
             }
 

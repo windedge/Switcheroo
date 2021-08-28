@@ -18,28 +18,27 @@
  * along with Switcheroo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using Serilog;
+using Switcheroo.Properties;
 using System;
 using System.Configuration;
 using System.Diagnostics;
 using System.Reflection;
 using System.Security.Principal;
 using System.Threading;
-using Serilog;
-using Switcheroo.Properties;
-using Switcheroo.Core;
 
 namespace Switcheroo
 {
     internal class Program
     {
-        
+
 
         private const string mutex_id = "DBDE24E4-91F6-11DF-B495-C536DFD72085-switcheroo";
 
         [STAThread]
         private static void Main()
         {
-            
+
             //Log.Logger = new LoggerConfiguration()
             //.MinimumLevel.Debug()
             ////.WriteTo.

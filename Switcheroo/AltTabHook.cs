@@ -18,12 +18,10 @@
  * along with Switcheroo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Diagnostics;
-using System.Windows.Forms;
 using ManagedWinapi;
 using ManagedWinapi.Hooks;
-using Serilog;
+using System;
+using System.Windows.Forms;
 
 namespace Switcheroo
 {
@@ -90,7 +88,7 @@ namespace Switcheroo
 
         private bool IsTabKeyDown(LowLevelKeyboardMessage keyboardMessage)
         {
-            return keyboardMessage.VirtualKeyCode == (int) Keys.Tab &&
+            return keyboardMessage.VirtualKeyCode == (int)Keys.Tab &&
                    (keyboardMessage.Message == WM_KEYDOWN || keyboardMessage.Message == WM_SYSKEYDOWN);
         }
 

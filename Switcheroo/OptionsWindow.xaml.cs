@@ -18,13 +18,13 @@
  * along with Switcheroo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using ManagedWinapi;
+using Switcheroo.Core;
+using Switcheroo.Properties;
 using System.Text;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using ManagedWinapi;
-using Switcheroo.Core;
-using Switcheroo.Properties;
 using Application = System.Windows.Application;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MessageBox = System.Windows.MessageBox;
@@ -41,7 +41,7 @@ namespace Switcheroo
             InitializeComponent();
 
             // Show what's already selected     
-            _hotkey = (HotKey) Application.Current.Properties["hotkey"];
+            _hotkey = (HotKey)Application.Current.Properties["hotkey"];
 
             try
             {
@@ -53,7 +53,7 @@ namespace Switcheroo
 
             _hotkeyViewModel = new HotkeyViewModel
             {
-                KeyCode = KeyInterop.KeyFromVirtualKey((int) _hotkey.KeyCode),
+                KeyCode = KeyInterop.KeyFromVirtualKey((int)_hotkey.KeyCode),
                 Alt = _hotkey.Alt,
                 Ctrl = _hotkey.Ctrl,
                 Windows = _hotkey.WindowsKey,
@@ -91,7 +91,7 @@ namespace Switcheroo
                     _hotkey.Shift = _hotkeyViewModel.Shift;
                     _hotkey.Ctrl = _hotkeyViewModel.Ctrl;
                     _hotkey.WindowsKey = _hotkeyViewModel.Windows;
-                    _hotkey.KeyCode = (Keys) KeyInterop.VirtualKeyFromKey(_hotkeyViewModel.KeyCode);
+                    _hotkey.KeyCode = (Keys)KeyInterop.VirtualKeyFromKey(_hotkeyViewModel.KeyCode);
                     _hotkey.Enabled = true;
                 }
 
@@ -150,7 +150,7 @@ namespace Switcheroo
             // Jump to the next element if the user presses only the Tab key
             if (previewText == "Tab")
             {
-                ((UIElement) sender).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                ((UIElement)sender).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
                 return;
             }
 
@@ -191,7 +191,7 @@ namespace Switcheroo
                 }
 
                 var keyString =
-                    KeyboardHelper.CodeToString((uint) KeyInterop.VirtualKeyFromKey(KeyCode)).ToUpper().Trim();
+                    KeyboardHelper.CodeToString((uint)KeyInterop.VirtualKeyFromKey(KeyCode)).ToUpper().Trim();
                 if (keyString.Length == 0)
                 {
                     keyString = new KeysConverter().ConvertToString(KeyCode);

@@ -18,7 +18,12 @@
  * along with Switcheroo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using ManagedWinapi;
+using ManagedWinapi.Windows;
 using Newtonsoft.Json;
+using Switcheroo.Core;
+using Switcheroo.Core.Matchers;
+using Switcheroo.Properties;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -34,11 +39,6 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
-using ManagedWinapi;
-using ManagedWinapi.Windows;
-using Switcheroo.Core;
-using Switcheroo.Core.Matchers;
-using Switcheroo.Properties;
 using Application = System.Windows.Application;
 using MenuItem = System.Windows.Forms.MenuItem;
 using MessageBox = System.Windows.MessageBox;
@@ -193,7 +193,7 @@ namespace Switcheroo
                 {
                     HideWindow();
                 }
-                else if (args.SystemKey == Key.LeftAlt && !Keyboard.Modifiers.HasFlag(ModifierKeys.Control) && _altTabAutoSwitch )
+                else if (args.SystemKey == Key.LeftAlt && !Keyboard.Modifiers.HasFlag(ModifierKeys.Control) && _altTabAutoSwitch)
                 {
                     Switch();
                 }
@@ -246,7 +246,7 @@ namespace Switcheroo
         private void SetUpNotifyIcon()
         {
             var icon = Properties.Resources.icon;
-            
+
             var runOnStartupMenuItem = new MenuItem("Run on &Startup", (s, e) => RunOnStartup(s as MenuItem))
             {
                 Checked = new AutoStart().IsEnabled
@@ -281,7 +281,7 @@ namespace Switcheroo
             {
                 if (Visibility != Visibility.Visible)
                 {
-                   _foregroundWindow = SystemWindow.ForegroundWindow;
+                    _foregroundWindow = SystemWindow.ForegroundWindow;
                     Show();
                     Activate();
                     LoadData(InitialFocus.NextItem);
@@ -404,7 +404,7 @@ namespace Switcheroo
             var firstWindow = _unfilteredWindowList.FirstOrDefault();
 
             var foregroundWindowMovedToBottom = false;
-            
+
             // Move first window to the bottom of the list if it's related to the foreground window
             if (firstWindow != null && AreWindowsRelated(firstWindow.AppWindow, _foregroundWindow))
             {
@@ -427,11 +427,11 @@ namespace Switcheroo
             {
                 _unfilteredWindowList = _unfilteredWindowList.OrderBy(x => x.FormattedProcessTitle).ToList();
             }
-            
+
             var _itemsCountToHighlight = Math.Min(_unfilteredWindowList.Count, 10);
             for (var i = 0; i < _itemsCountToHighlight; i++)
             {
-                _unfilteredWindowList[i].FormattedTitle = new XamlHighlighter().Highlight(new[] { new StringPart("" + (i + 1) + " ", true) }) + _unfilteredWindowList[i].FormattedTitle ;
+                _unfilteredWindowList[i].FormattedTitle = new XamlHighlighter().Highlight(new[] { new StringPart("" + (i + 1) + " ", true) }) + _unfilteredWindowList[i].FormattedTitle;
             }
 
             if (_sortWinList == true)
@@ -446,7 +446,7 @@ namespace Switcheroo
 
             FocusItemInList(focus, foregroundWindowMovedToBottom);
 
-            if ( tb.IsEnabled ) tb.Clear();
+            if (tb.IsEnabled) tb.Clear();
             tb.Focus();
             CenterWindow();
             ScrollSelectedItemIntoView();
@@ -488,8 +488,8 @@ namespace Switcheroo
             SizeToContent = SizeToContent.WidthAndHeight;
 
             // Position the window in the center of the screen
-            Left = (SystemParameters.PrimaryScreenWidth/2) - (ActualWidth/2);
-            Top = (SystemParameters.PrimaryScreenHeight/2) - (ActualHeight/2);
+            Left = (SystemParameters.PrimaryScreenWidth / 2) - (ActualWidth / 2);
+            Top = (SystemParameters.PrimaryScreenHeight / 2) - (ActualHeight / 2);
         }
 
         /// <summary>
@@ -773,7 +773,7 @@ namespace Switcheroo
             }
             e.Handled = true;
         }
-        
+
         private void MenuItem_Click_toFront(object sender, RoutedEventArgs e)
         {
             Switch();
@@ -810,7 +810,7 @@ namespace Switcheroo
             foreach (var win in windows)
             {
                 bool isClosed = await _windowCloser.TryCloseAsync(win);
-                if(isClosed)
+                if (isClosed)
                     RemoveWindow(win);
             }
 
@@ -886,7 +886,7 @@ namespace Switcheroo
                 ScrollSelectedItemIntoView();
             }
         }
-        
+
         private void ScrollListPageUp(object sender, ExecutedRoutedEventArgs e)
         {
             double n = NumOfVisibleRows();
@@ -915,7 +915,7 @@ namespace Switcheroo
 
         private double NumOfVisibleRows()
         {
-            return Math.Round(lb.ActualHeight / SearchGrid.ActualHeight); 
+            return Math.Round(lb.ActualHeight / SearchGrid.ActualHeight);
         }
 
         private void ScrollListHome(object sender, ExecutedRoutedEventArgs e)
@@ -928,12 +928,12 @@ namespace Switcheroo
 
         private void ScrollListEnd(object sender, ExecutedRoutedEventArgs e)
         {
-            lb.SelectedIndex = lb.Items.Count-1;
+            lb.SelectedIndex = lb.Items.Count - 1;
             ScrollSelectedItemIntoView();
 
             e.Handled = true;
         }
-        
+
         private void ScrollSelectedItemIntoView()
         {
             var selectedItem = lb.SelectedItem;
@@ -974,7 +974,7 @@ namespace Switcheroo
             NextItem,
             PreviousItem
         }
-        
+
         void Toggle_sortWinList()
         {
             _sortWinList = !_sortWinList;
@@ -983,13 +983,14 @@ namespace Switcheroo
 
         void Toggle_MenuItem(String text)
         {
-            foreach (MenuItem mi in _notifyIcon.ContextMenu.MenuItems) {
-                if((String)mi.Text == text) 
+            foreach (MenuItem mi in _notifyIcon.ContextMenu.MenuItems)
+            {
+                if ((String)mi.Text == text)
                 {
                     mi.Checked = !mi.Checked;
                 }
             }
         }
-        
+
     }
 }

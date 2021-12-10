@@ -3,7 +3,7 @@
  * http://www.switcheroo.io/
  * Copyright 2009, 2010 James Sulak
  * Copyright 2014 Regin Larsen
- * 
+ *
  * Switcheroo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -13,11 +13,12 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Switcheroo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using Serilog;
 using ManagedWinapi;
 using ManagedWinapi.Windows;
 using Newtonsoft.Json;
@@ -640,7 +641,7 @@ namespace Switcheroo
             }
 
             _foregroundWindow = SystemWindow.ForegroundWindow;
-
+            Log.Information("_foregroundWindow.ClassName == \"MultitaskingViewFrame: {0}\"", _foregroundWindow.ClassName == "MultitaskingViewFrame");
             if (_foregroundWindow.ClassName == "MultitaskingViewFrame")
             {
                 // If Windows' task switcher is on the screen then don't do anything
@@ -649,6 +650,7 @@ namespace Switcheroo
 
             e.Handled = true;
 
+            Log.Information("Visibility != Visibility.Visible: {0}", Visibility != Visibility.Visible);
             if (Visibility != Visibility.Visible)
             {
                 tb.IsEnabled = true;
@@ -665,6 +667,7 @@ namespace Switcheroo
                     LoadData(InitialFocus.NextItem);
                 }
 
+                Log.Information("Settings.Default.AutoSwitch && !e.CtrlDown: {0}", Settings.Default.AutoSwitch && !e.CtrlDown);
                 if (Settings.Default.AutoSwitch && !e.CtrlDown)
                 {
                     _altTabAutoSwitch = true;

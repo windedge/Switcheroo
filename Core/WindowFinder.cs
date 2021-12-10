@@ -32,12 +32,12 @@ namespace Switcheroo.Core
         public List<AppWindow> GetWindows()
         {
             var appWindows = new frigo::WindowFinder().Windows.ToList();
-            Log.Information("appWindows size: {size}", appWindows.Count());
+            // Log.Information("appWindows size: {size}", appWindows.Count());
 
             return AppWindow.AllToplevelWindows
                 .Where(a => {
                     var match = appWindows.Find(h => h.handle == a.HWnd) != frigo.WindowHandle.Null;
-                    Log.Information("match: {0}", match);
+                    // Log.Information("match: {0}", match);
 
                     return a.IsAltTabWindow() && match;
                 }).ToList();

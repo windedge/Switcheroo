@@ -122,7 +122,8 @@ namespace Switcheroo.Core
             if (!Visible) return false;
             if (!HasWindowTitle()) return false;
             if (IsAppWindow()) return true;
-            if (IsToolWindow()) return false;
+            // if (IsToolWindow()) return false;
+            if (IsToolWindow()) return true;
             if (IsNoActivate()) return false;
             if (!IsOwnerOrOwnerNotVisible()) return false;
             if (HasITaskListDeletedProperty()) return false;

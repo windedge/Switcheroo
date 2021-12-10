@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Switcheroo.Core;
 using frigo = FrigoTab;
+using System;
 
 namespace Switcheroo.Core
 {
@@ -32,15 +33,16 @@ namespace Switcheroo.Core
         public List<AppWindow> GetWindows()
         {
             var appWindows = new frigo::WindowFinder().Windows.ToList();
-            // Log.Information("appWindows size: {size}", appWindows.Count());
-
-            return AppWindow.AllToplevelWindows
-                .Where(a => {
+            var filtered = AppWindow.AllToplevelWindows
+                .Where(a =>
+                {
                     var match = appWindows.Find(h => h.handle == a.HWnd) != frigo.WindowHandle.Null;
-                    // Log.Information("match: {0}", match);
-
                     return a.IsAltTabWindow() && match;
                 }).ToList();
+
+            var lines = String.Join("\n", filtered.Select(x => "title: " + x.Title));
+            Log.Information("lines: {0}", lines);
+            return filtered;
         }
     }
 }

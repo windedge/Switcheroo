@@ -27,6 +27,7 @@ using System.Runtime.Caching;
 using System.Runtime.InteropServices;
 using System.Text;
 using ManagedWinapi.Windows;
+using Serilog;
 
 namespace Switcheroo.Core
 {

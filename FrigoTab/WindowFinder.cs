@@ -56,7 +56,9 @@ namespace FrigoTab {
             if( style.HasFlag(WindowStyles.Disabled) ) {
                 return WindowType.Hidden;
             }
-            if( !style.HasFlag(WindowStyles.Visible) ) {
+
+            var visible = style.HasFlag(WindowStyles.Visible);
+            if( !visible ) {
                 return WindowType.Hidden;
             }
 
@@ -70,8 +72,8 @@ namespace FrigoTab {
             if( ex.HasFlag(WindowExStyles.ToolWindow) ) {
                 return WindowType.ToolWindow;
             }
-            var title = GetWindowTitle(handle.handle);
-            return IsAltTabWindow(handle) ? WindowType.AppWindow : WindowType.Hidden;
+            // return IsAltTabWindow(handle) ? WindowType.AppWindow : WindowType.Hidden;
+            return WindowType.AppWindow;
         }
 
         private static int IsCloaked (WindowHandle window) {
@@ -80,7 +82,7 @@ namespace FrigoTab {
         }
 
         private static bool IsAltTabWindow(WindowHandle hwnd) {
-            var lastActivePop = GetLastActiveVisiblePopup(GetAncestor(hwnd, 3));
+            var lastActivePop = GetLastActiveVisiblePopup(hwnd);
             return lastActivePop == hwnd;
         }
 

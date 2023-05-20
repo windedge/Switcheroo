@@ -68,6 +68,7 @@ namespace Switcheroo
             AutoSwitch.IsChecked = Settings.Default.AutoSwitch;
             AutoSwitch.IsEnabled = Settings.Default.AltTabHook;
             RunAsAdministrator.IsChecked = Settings.Default.RunAsAdmin;
+            FirstWindowsOnly.IsChecked = Settings.Default.FirstWindowsOnly;
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -109,6 +110,7 @@ namespace Switcheroo
             Settings.Default.AltTickHook = AltTickCheckBox.IsChecked.GetValueOrDefault();
             Settings.Default.AutoSwitch = AutoSwitch.IsChecked.GetValueOrDefault();
             Settings.Default.RunAsAdmin = RunAsAdministrator.IsChecked.GetValueOrDefault();
+            Settings.Default.FirstWindowsOnly = FirstWindowsOnly.IsChecked.GetValueOrDefault();
             Settings.Default.Save();
 
             if (closeOptionsWindow)

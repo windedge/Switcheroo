@@ -1,9 +1,9 @@
 ﻿<Window x:Class="Switcheroo.OptionsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Switcheroo Options" ResizeMode="NoResize" SizeToContent="WidthAndHeight"
-        ShowInTaskbar="False" WindowStyle="ToolWindow" Background="{x:Static SystemColors.WindowBrush}" Height="380"
-        MaxWidth="350">
+        Title="Switcheroo Options" ResizeMode="NoResize"
+        ShowInTaskbar="False" WindowStyle="ToolWindow" Background="{x:Static SystemColors.WindowBrush}"
+        MaxWidth="380" SizeToContent="WidthAndHeight" Height="393">
     <Window.Resources>
     </Window.Resources>
     <Grid>
@@ -22,6 +22,7 @@
             <TextBlock Margin="25,0,5,10" FontSize="10" Foreground="DimGray" TextWrapping="Wrap">
                 Use Switcheroo instead of the integrated task switcher in Windows.
             </TextBlock>
+            <CheckBox Name="FirstWindowsOnly" Margin="5,5,5,1">Only cycle through first window of each group with Alt+Tab</CheckBox>
             <CheckBox Name="AltTickCheckBox" Margin="5,5,5,1">Enable Alt+Tick behavior</CheckBox>
             <TextBlock Margin="25,0,5,10" FontSize="10" Foreground="DimGray" TextWrapping="Wrap">
                 Cycle through related windows.

@@ -265,27 +265,34 @@ namespace Switcheroo
         /// <summary>
         /// Populates the window list with the current running windows.
         /// </summary>
-        private void LoadData(InitialFocus focus, bool related_windows = false)
+        private void LoadData(InitialFocus focus, bool relatedWindowsOnly = false)
         {
-            _unfilteredWindowList = new WindowFinder().GetWindows().Select(window => new AppWindowViewModel(window)).ToList();
-            // Only cycle through related windows
-            if (related_windows)
-                _unfilteredWindowList = _unfilteredWindowList.Where(m => AreWindowsRelated(_unfilteredWindowList.First().AppWindow, m.AppWindow)).ToList();
-
-            var firstWindow = _unfilteredWindowList.FirstOrDefault();
+            var windowList = new WindowFinder().GetWindows();
+            var firstWindow = windowList.FirstOrDefault();
 
             var foregroundWindowMovedToBottom = false;
             
-            // Move first window to the bottom of the list if it's related to the foreground window
-            if (firstWindow != null && AreWindowsRelated(firstWindow.AppWindow, _foregroundWindow))
+            if (firstWindow != null)
             {
-                _unfilteredWindowList.RemoveAt(0);
-                _unfilteredWindowList.Add(firstWindow);
-                foregroundWindowMovedToBottom = true;
+                // Only cycle through related windows
+                if (relatedWindowsOnly)
+                {
+                    windowList = windowList.Where(m => AreWindowsRelated(firstWindow, m)).ToList();
+                }
+                // Only cycle through first window of each process
+                else if (Settings.Default.FirstWindowsOnly)
+                {
+                    windowList = windowList.GroupBy(m => m.Process.Id).Select(m => m.FirstOrDefault()).ToList();
+                }
+                // Move first window to the bottom of the list if it's related to the foreground window
+                if (AreWindowsRelated(firstWindow, _foregroundWindow)) {
+                    windowList.RemoveAt(0);
+                    windowList.Add(firstWindow);
+                    foregroundWindowMovedToBottom = true;
+                }
             }
 
-            _filteredWindowList = new ObservableCollection<AppWindowViewModel>(_unfilteredWindowList);
-            _windowCloser = new WindowCloser();
+            _unfilteredWindowList = windowList.Select(m => new AppWindowViewModel(m)).ToList();
 
             foreach (var window in _unfilteredWindowList)
             {
@@ -293,6 +300,9 @@ namespace Switcheroo
                 window.FormattedProcessTitle =
                     new XamlHighlighter().Highlight(new[] {new StringPart(window.AppWindow.ProcessTitle)});
             }
+
+            _filteredWindowList = new ObservableCollection<AppWindowViewModel>(_unfilteredWindowList);
+            _windowCloser = new WindowCloser();
 
             lb.DataContext = null;
             lb.DataContext = _filteredWindowList;
@@ -305,7 +315,7 @@ namespace Switcheroo
             ScrollSelectedItemIntoView();
         }
 
-        private static bool AreWindowsRelated(SystemWindow window1, SystemWindow window2)
+        public static bool AreWindowsRelated(SystemWindow window1, SystemWindow window2)
         {
             return window1.HWnd == window2.HWnd || window1.Process.Id == window2.Process.Id;
         }

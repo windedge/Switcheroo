@@ -64,6 +64,7 @@ namespace Switcheroo
             HotkeyPreview.Text = _hotkeyViewModel.ToString();
             HotkeyPreview.IsEnabled = Settings.Default.EnableHotKey;
             AltTabCheckBox.IsChecked = Settings.Default.AltTabHook;
+            AltTickCheckBox.IsChecked = Settings.Default.AltTickHook;
             AutoSwitch.IsChecked = Settings.Default.AutoSwitch;
             AutoSwitch.IsEnabled = Settings.Default.AltTabHook;
             RunAsAdministrator.IsChecked = Settings.Default.RunAsAdmin;
@@ -105,6 +106,7 @@ namespace Switcheroo
 
             Settings.Default.EnableHotKey = HotKeyCheckBox.IsChecked.GetValueOrDefault();
             Settings.Default.AltTabHook = AltTabCheckBox.IsChecked.GetValueOrDefault();
+            Settings.Default.AltTickHook = AltTickCheckBox.IsChecked.GetValueOrDefault();
             Settings.Default.AutoSwitch = AutoSwitch.IsChecked.GetValueOrDefault();
             Settings.Default.RunAsAdmin = RunAsAdministrator.IsChecked.GetValueOrDefault();
             Settings.Default.Save();

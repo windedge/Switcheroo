@@ -22,6 +22,10 @@
             <TextBlock Margin="25,0,5,10" FontSize="10" Foreground="DimGray" TextWrapping="Wrap">
                 Use Switcheroo instead of the integrated task switcher in Windows.
             </TextBlock>
+            <CheckBox Name="AltTickCheckBox" Margin="5,5,5,1">Enable Alt+Tick behavior</CheckBox>
+            <TextBlock Margin="25,0,5,10" FontSize="10" Foreground="DimGray" TextWrapping="Wrap">
+                Cycle through related windows.
+            </TextBlock>
             <CheckBox Name="AutoSwitch" Margin="5,5,5,1">Automatically switch window when releasing Alt + Tab</CheckBox>
             <TextBlock Margin="25,0,5,10" FontSize="10" Foreground="DimGray" TextWrapping="Wrap">
                 Faster and more native-like swiching between windows.<LineBreak />

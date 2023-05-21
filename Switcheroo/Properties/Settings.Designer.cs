@@ -166,5 +166,17 @@ namespace Switcheroo.Properties {
                 this["FirstWindowsOnly"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool HotKeyShowAllWindows {
+            get {
+                return ((bool)(this["HotKeyShowAllWindows"]));
+            }
+            set {
+                this["HotKeyShowAllWindows"] = value;
+            }
+        }
     }
 }

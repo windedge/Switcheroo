@@ -11,7 +11,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <StackPanel Margin="5,5,5,5">
-            <CheckBox Name="HotKeyCheckBox" Margin="5,5,5,1" Checked="HotKeyCheckBox_Checked" Unchecked="HotKeyCheckBox_OnUnchecked">Activate Switcheroo with this shortcut:</CheckBox>
+            <CheckBox Name="HotKeyCheckBox" Margin="5,5,5,1" Checked="HotKeyCheckBox_OnChecked" Unchecked="HotKeyCheckBox_OnUnchecked">Activate Switcheroo with this shortcut:</CheckBox>
             <TextBox Name="HotkeyPreview" Margin="25,5,0,10"
                      PreviewKeyDown="HotkeyPreview_OnPreviewKeyDown"
                      GotFocus="HotkeyPreview_OnGotFocus"
@@ -22,11 +22,9 @@
             <TextBlock Margin="25,0,5,10" FontSize="10" Foreground="DimGray" TextWrapping="Wrap">
                 Use Switcheroo instead of the integrated task switcher in Windows.
             </TextBlock>
-            <CheckBox Name="FirstWindowsOnly" Margin="5,5,5,1">Only cycle through first window of each group with Alt+Tab</CheckBox>
-            <CheckBox Name="AltTickCheckBox" Margin="5,5,5,1">Enable Alt+Tick behavior</CheckBox>
-            <TextBlock Margin="25,0,5,10" FontSize="10" Foreground="DimGray" TextWrapping="Wrap">
-                Cycle through related windows.
-            </TextBlock>
+            <CheckBox Name="FirstWindowsOnly" Checked="FirstWindowsOnlyCheckBox_OnChecked" Unchecked="FirstWindowsOnlyCheckBox_OnUnchecked" Margin="5,5,5,1">Only cycle through first window of each group with Alt+Tab</CheckBox>
+            <CheckBox Name="HotKeyShowAllWindows" Margin="5,5,5,1">Show all windows with shortcut</CheckBox>
+            <CheckBox Name="AltTickCheckBox" Margin="5,5,5,1">Cycle through related windows with Alt+`</CheckBox>
             <CheckBox Name="AutoSwitch" Margin="5,5,5,1">Automatically switch window when releasing Alt + Tab</CheckBox>
             <TextBlock Margin="25,0,5,10" FontSize="10" Foreground="DimGray" TextWrapping="Wrap">
                 Faster and more native-like swiching between windows.<LineBreak />

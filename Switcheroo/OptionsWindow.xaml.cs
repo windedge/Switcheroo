@@ -69,6 +69,7 @@ namespace Switcheroo
             AutoSwitch.IsEnabled = Settings.Default.AltTabHook;
             RunAsAdministrator.IsChecked = Settings.Default.RunAsAdmin;
             FirstWindowsOnly.IsChecked = Settings.Default.FirstWindowsOnly;
+            HotKeyShowAllWindows.IsChecked = Settings.Default.HotKeyShowAllWindows;
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -108,9 +109,10 @@ namespace Switcheroo
             Settings.Default.EnableHotKey = HotKeyCheckBox.IsChecked.GetValueOrDefault();
             Settings.Default.AltTabHook = AltTabCheckBox.IsChecked.GetValueOrDefault();
             Settings.Default.AltTickHook = AltTickCheckBox.IsChecked.GetValueOrDefault();
-            Settings.Default.AutoSwitch = AutoSwitch.IsChecked.GetValueOrDefault();
+            Settings.Default.AutoSwitch = AutoSwitch.IsEnabled && AutoSwitch.IsChecked.GetValueOrDefault();
             Settings.Default.RunAsAdmin = RunAsAdministrator.IsChecked.GetValueOrDefault();
-            Settings.Default.FirstWindowsOnly = FirstWindowsOnly.IsChecked.GetValueOrDefault();
+            Settings.Default.FirstWindowsOnly = FirstWindowsOnly.IsEnabled && FirstWindowsOnly.IsChecked.GetValueOrDefault();
+            Settings.Default.HotKeyShowAllWindows = HotKeyShowAllWindows.IsEnabled && HotKeyShowAllWindows.IsChecked.GetValueOrDefault();
             Settings.Default.Save();
 
             if (closeOptionsWindow)
@@ -235,17 +237,30 @@ namespace Switcheroo
         private void AltTabCheckBox_OnUnchecked(object sender, RoutedEventArgs e)
         {
             AutoSwitch.IsEnabled = false;
-            AutoSwitch.IsChecked = false;
         }
 
-        private void HotKeyCheckBox_Checked(object sender, RoutedEventArgs e)
+        private void HotKeyCheckBox_OnChecked(object sender, RoutedEventArgs e)
         {
             HotkeyPreview.IsEnabled = true;
+            if (Settings.Default.FirstWindowsOnly)
+                HotKeyShowAllWindows.IsEnabled = true;
         }
 
         private void HotKeyCheckBox_OnUnchecked(object sender, RoutedEventArgs e)
         {
             HotkeyPreview.IsEnabled = false;
+            HotKeyShowAllWindows.IsEnabled = false;
+        }
+
+        private void FirstWindowsOnlyCheckBox_OnChecked(object sender, RoutedEventArgs e)
+        {
+            if (Settings.Default.EnableHotKey)
+                HotKeyShowAllWindows.IsEnabled = true;
+        }
+
+        private void FirstWindowsOnlyCheckBox_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            HotKeyShowAllWindows.IsEnabled = false;
         }
     }
 }

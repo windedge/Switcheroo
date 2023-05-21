@@ -265,7 +265,7 @@ namespace Switcheroo
         /// <summary>
         /// Populates the window list with the current running windows.
         /// </summary>
-        private void LoadData(InitialFocus focus, bool relatedWindowsOnly = false)
+        private void LoadData(InitialFocus focus, bool relatedWindowsOnly = false, bool showAllWindows = false)
         {
             var windowList = new WindowFinder().GetWindows();
             var firstWindow = windowList.FirstOrDefault();
@@ -280,7 +280,7 @@ namespace Switcheroo
                     windowList = windowList.Where(m => AreWindowsRelated(firstWindow, m)).ToList();
                 }
                 // Only cycle through first window of each process
-                else if (Settings.Default.FirstWindowsOnly)
+                else if (Settings.Default.FirstWindowsOnly && !showAllWindows)
                 {
                     windowList = windowList.GroupBy(m => m.Process.Id).Select(m => m.FirstOrDefault()).ToList();
                 }
@@ -468,7 +468,7 @@ namespace Switcheroo
                 Show();
                 Activate();
                 Keyboard.Focus(tb);
-                LoadData(InitialFocus.NextItem);
+                LoadData(InitialFocus.NextItem, false, true);
                 Opacity = 1;
             }
             else

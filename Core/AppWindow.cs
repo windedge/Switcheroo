@@ -100,7 +100,7 @@ namespace Switcheroo.Core
             WinApi.SwitchToThisWindow(lastActiveVisiblePopup, true);
         }
 
-        public AppWindow Owner
+        public new AppWindow Owner
         {
             get
             {

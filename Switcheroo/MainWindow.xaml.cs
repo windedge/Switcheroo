@@ -37,15 +37,19 @@ using ManagedWinapi;
 using ManagedWinapi.Windows;
 using Switcheroo.Core;
 using Switcheroo.Core.Matchers;
+using VirtualDesktop;
 using Switcheroo.Properties;
 using Application = System.Windows.Application;
 using MenuItem = System.Windows.Forms.MenuItem;
 using MessageBox = System.Windows.MessageBox;
+using System.Threading;
 
 namespace Switcheroo
 {
     public partial class MainWindow : Window
     {
+        private WindowFinder _windowFinder = new WindowFinder();
+        private Desktop _desktop;
         private WindowCloser _windowCloser;
         private List<AppWindowViewModel> _unfilteredWindowList;
         private ObservableCollection<AppWindowViewModel> _filteredWindowList;
@@ -267,7 +271,12 @@ namespace Switcheroo
         /// </summary>
         private void LoadData(InitialFocus focus, bool relatedWindowsOnly = false, bool showAllWindows = false)
         {
-            var windowList = new WindowFinder().GetWindows();
+            var windowList = _windowFinder.GetWindows();
+            Dispatcher.BeginInvoke(new Action(() => {
+                _desktop = Desktop.Current;
+                windowList = windowList.Where(m => _desktop.HasWindow(m.HWnd)).ToList();
+            }), DispatcherPriority.DataBind);
+
             var firstWindow = windowList.FirstOrDefault();
 
             var foregroundWindowMovedToBottom = false;
@@ -360,9 +369,9 @@ namespace Switcheroo
         /// </summary>
         private void Switch()
         {
-            foreach (var item in lb.SelectedItems)
+            foreach (var item in lb.SelectedItems.Cast<AppWindowViewModel>())
             {
-                var win = (AppWindowViewModel)item;
+                var win = item;
                 win.AppWindow.SwitchToLastVisibleActivePopup();
             }
 

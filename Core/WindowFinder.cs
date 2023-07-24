@@ -27,6 +27,7 @@ namespace Switcheroo.Core
     {
         public List<AppWindow> GetWindows()
         {
+            //var currentDesktop = VirtualDesktop.Desktop.Current;
             return AppWindow.AllToplevelWindows
                 .Where(a => a.IsAltTabWindow())
                 .ToList();

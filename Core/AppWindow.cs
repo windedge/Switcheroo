@@ -123,6 +123,7 @@ namespace Switcheroo.Core
         {
             if (!Visible) return false;
             if (!HasWindowTitle()) return false;
+            //if (!IsInCurrentDesktop()) return false;
             if (IsAppWindow()) return true;
             if (IsToolWindow()) return false;
             if (IsNoActivate()) return false;
@@ -130,7 +131,36 @@ namespace Switcheroo.Core
             if (HasITaskListDeletedProperty()) return false;
             if (IsCoreWindow()) return false;
             if (IsApplicationFrameWindow() && !HasAppropriateApplicationViewCloakType()) return false;
+            if (IsCloaked()) return false;
 
+            return true;
+        }
+
+        private List<IntPtr> currentDesktopHandles = new List<IntPtr>();
+
+        private bool IsInCurrentDesktop()
+        {
+            var currentDesktop = VirtualDesktop.Desktop.Current;
+            var inCurrentDesktop = false;
+            try
+            {
+                inCurrentDesktop = currentDesktop.HasWindow(HWnd);
+            }
+            catch (Exception ex)
+            {
+                //Console.WriteLine(ex);
+            }
+            return inCurrentDesktop;
+            //currentDesktopHandles.Clear();
+            //int result = WinApi.EnumDesktopWindows(IntPtr.Zero, EnumWindowCallback, 0);
+            //if (result == 0) return true;
+
+            //return currentDesktopHandles.Contains(HWnd);
+        }
+
+        private bool EnumWindowCallback(IntPtr hWnd, int lParam)
+        {
+            currentDesktopHandles.Add(hWnd);
             return true;
         }
 
@@ -213,7 +243,7 @@ namespace Switcheroo.Core
             //    2 = Program is running on a different virtual desktop
 
             var hasAppropriateApplicationViewCloakType = false;
-            WinApi.EnumPropsEx(HWnd, (hwnd, lpszString, data, dwData) =>  
+            WinApi.EnumPropsEx(HWnd, (hwnd, lpszString, data, dwData) =>
             {
                 var propName = Marshal.PtrToStringAnsi(lpszString);
                 if (propName == "ApplicationViewCloakType")
@@ -225,6 +255,12 @@ namespace Switcheroo.Core
             }, IntPtr.Zero);
 
             return hasAppropriateApplicationViewCloakType;
+        }
+
+        private bool IsCloaked()
+        {
+            var cloakAttr = WinApi.DwmCloakedAttr(HWnd);
+            return cloakAttr > 0;
         }
 
         // This method only works on Windows >= Windows Vista

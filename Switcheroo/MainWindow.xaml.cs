@@ -114,6 +114,14 @@ namespace Switcheroo
                     tb.IsEnabled = true;
                     tb.Focus();
                 }
+                else if (args.Key == Key.K && Keyboard.Modifiers.HasFlag(ModifierKeys.Alt))
+                {
+                    PreviousItem();
+                }
+                else if (args.Key == Key.J && Keyboard.Modifiers.HasFlag(ModifierKeys.Alt))
+                {
+                    NextItem();
+                }
             };
 
             KeyUp += (sender, args) =>
@@ -272,7 +280,8 @@ namespace Switcheroo
         private void LoadData(InitialFocus focus, bool relatedWindowsOnly = false, bool showAllWindows = false)
         {
             var windowList = _windowFinder.GetWindows();
-            Dispatcher.BeginInvoke(new Action(() => {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
                 _desktop = Desktop.Current;
                 windowList = windowList.Where(m => _desktop.HasWindow(m.HWnd)).ToList();
             }), DispatcherPriority.DataBind);
@@ -280,7 +289,7 @@ namespace Switcheroo
             var firstWindow = windowList.FirstOrDefault();
 
             var foregroundWindowMovedToBottom = false;
-            
+
             if (firstWindow != null)
             {
                 // Only cycle through related windows
@@ -294,7 +303,8 @@ namespace Switcheroo
                     windowList = windowList.GroupBy(m => m.Process.Id).Select(m => m.FirstOrDefault()).ToList();
                 }
                 // Move first window to the bottom of the list if it's related to the foreground window
-                if (AreWindowsRelated(firstWindow, _foregroundWindow)) {
+                if (AreWindowsRelated(firstWindow, _foregroundWindow))
+                {
                     windowList.RemoveAt(0);
                     windowList.Add(firstWindow);
                     foregroundWindowMovedToBottom = true;
@@ -305,9 +315,9 @@ namespace Switcheroo
 
             foreach (var window in _unfilteredWindowList)
             {
-                window.FormattedTitle = new XamlHighlighter().Highlight(new[] {new StringPart(window.AppWindow.Title)});
+                window.FormattedTitle = new XamlHighlighter().Highlight(new[] { new StringPart(window.AppWindow.Title) });
                 window.FormattedProcessTitle =
-                    new XamlHighlighter().Highlight(new[] {new StringPart(window.AppWindow.ProcessTitle)});
+                    new XamlHighlighter().Highlight(new[] { new StringPart(window.AppWindow.ProcessTitle) });
             }
 
             _filteredWindowList = new ObservableCollection<AppWindowViewModel>(_unfilteredWindowList);
@@ -360,8 +370,8 @@ namespace Switcheroo
             SizeToContent = SizeToContent.WidthAndHeight;
 
             // Position the window in the center of the screen
-            Left = (SystemParameters.PrimaryScreenWidth/2) - (ActualWidth/2);
-            Top = (SystemParameters.PrimaryScreenHeight/2) - (ActualHeight/2);
+            Left = (SystemParameters.PrimaryScreenWidth / 2) - (ActualWidth / 2);
+            Top = (SystemParameters.PrimaryScreenHeight / 2) - (ActualHeight / 2);
         }
 
         /// <summary>
@@ -688,7 +698,7 @@ namespace Switcheroo
             foreach (var win in windows)
             {
                 bool isClosed = await _windowCloser.TryCloseAsync(win);
-                if(isClosed)
+                if (isClosed)
                     RemoveWindow(win);
             }
 

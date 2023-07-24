@@ -351,7 +351,7 @@ namespace ManagedWinapi.Windows
         public static SystemWindow[] FilterToplevelWindows(Predicate<SystemWindow> predicate)
         {
             List<SystemWindow> wnds = new List<SystemWindow>();
-            EnumWindows(new EnumWindowsProc(delegate(IntPtr hwnd, IntPtr lParam)
+            EnumDesktopWindows(IntPtr.Zero, new EnumWindowsProc(delegate (IntPtr hwnd, IntPtr lParam)
             {
                 SystemWindow tmp = new SystemWindow(hwnd);
                 if (predicate(tmp))
@@ -474,7 +474,7 @@ namespace ManagedWinapi.Windows
         public SystemWindow[] FilterDescendantWindows(bool directOnly, Predicate<SystemWindow> predicate)
         {
             List<SystemWindow> wnds = new List<SystemWindow>();
-            EnumChildWindows(_hwnd, delegate(IntPtr hwnd, IntPtr lParam)
+            EnumChildWindows(_hwnd, delegate (IntPtr hwnd, IntPtr lParam)
             {
                 SystemWindow tmp = new SystemWindow(hwnd);
                 bool add = true;
@@ -600,26 +600,26 @@ namespace ManagedWinapi.Windows
             }
         }
 
-		private bool _isClosed = false;
-		public bool IsClosed
-		{
-			get
-			{
-				_isClosed = _isClosed || GetClassNameFails();
-				return _isClosed;
-			}
-		}
+        private bool _isClosed = false;
+        public bool IsClosed
+        {
+            get
+            {
+                _isClosed = _isClosed || GetClassNameFails();
+                return _isClosed;
+            }
+        }
 
-		private bool GetClassNameFails()
-		{
-			StringBuilder builder = new StringBuilder( 2 );
-			return GetClassName( HWnd, builder, builder.Capacity ) == 0;
-		}
+        private bool GetClassNameFails()
+        {
+            StringBuilder builder = new StringBuilder(2);
+            return GetClassName(HWnd, builder, builder.Capacity) == 0;
+        }
 
-		public bool IsClosedOrHidden
-		{
-			get { return IsClosed || !Visible; }
-		}
+        public bool IsClosedOrHidden
+        {
+            get { return IsClosed || !Visible; }
+        }
 
         /// <summary>
         /// Returns or sets the visibility flag.
@@ -1217,6 +1217,9 @@ namespace ManagedWinapi.Windows
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern bool EnumDesktopWindows(IntPtr hDesktop, EnumWindowsProc lpEnumFunc, IntPtr lParam);
 
         private delegate int EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
 

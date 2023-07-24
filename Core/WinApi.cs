@@ -41,6 +41,9 @@ namespace Switcheroo.Core
         public static extern int EnumWindows(EnumWindowsProc ewp, int lParam);
 
         [DllImport("user32.dll")]
+        public static extern int EnumDesktopWindows(IntPtr hDesktop, EnumWindowsProc ewp, int lParam);
+
+        [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool IsWindowVisible(IntPtr hWnd);
 
@@ -311,5 +314,22 @@ namespace Switcheroo.Core
         [DllImport("user32.dll")]
         public static extern int EnumPropsEx(IntPtr hWnd, EnumPropsExDelegate lpEnumFunc, IntPtr lParam);
         public delegate int EnumPropsExDelegate(IntPtr hwnd, IntPtr lpszString, long hData, long dwData);
+
+
+        private enum WindowAttribute
+        {
+            Cloaked = 0xe
+        }
+        [DllImport("dwmapi.dll")]
+        private static extern int DwmGetWindowAttribute(IntPtr hWnd, WindowAttribute dwAttribute, out int pvAttribute, int cbAttribute);
+
+
+        public static int DwmCloakedAttr(IntPtr hwnd)
+        {
+            DwmGetWindowAttribute(hwnd, WindowAttribute.Cloaked, out int cloaked, Marshal.SizeOf(typeof(bool)));
+            return cloaked;
+        }
+
+
     }
 }
